@@ -17,6 +17,18 @@
 <p>
     <a asp-action="Create">Create New</a>
 </p>
+
+@{
+    if (TempData["Mensaje"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show my-3" role="alert">
+            <i class="bi bi-check-circle-fill me-2"><strong>@TempData["Mensaje"]</strong>
+            <button type="button" class="btn-close"></button>
+        </div>
+
+    }
+}
+
 <table class="table table-striped table-bordered">
     <thead class="table-dark">
         <tr>
@@ -35,7 +47,7 @@
             <tr>
                 <td>@item.ProductID</td>
                 <td>@item.ProductName</td>
-                <td>@item.UnitPrice</td>
+                <td>@item.UnitPrice.ToString("C2")</td>
                 <td>@item.UnitsInStock</td>
                 <td>@item.CompanyName</td>
                 <td>@item.CategoryName</td>
@@ -50,7 +62,8 @@
     </tbody>
 </table>
 
-@if(!Model.Any()){
+@if (!Model.Any())
+{
     <div class="alert alert-warning">
         No se encontraron productos!
     </div>

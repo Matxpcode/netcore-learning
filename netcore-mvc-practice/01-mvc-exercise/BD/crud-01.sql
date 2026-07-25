@@ -55,11 +55,13 @@ VALUES
 ('Mishi Kobe Niku',97.00,29,0,3,3);
 GO
 
---select * from Products;
---select * from Categories;
---select * from Suppliers;
+select * from Products;
+select * from Categories;
+select * from Suppliers;
 
---4.Procedure "listado-products-porNombre"
+--PROCEDURES
+
+--Procedure "listado-products-porNombre"
 CREATE OR ALTER PROCEDURE sp_list_products_by_name
 	@ProductName VARCHAR(80)
 AS
@@ -79,7 +81,9 @@ BEGIN
 END
 GO
 
---5.Procedure "listado-categorias"
+select * from Products;
+
+--5.Procedure "listado-categorias" -> DROPDOWN CATEGORIAS
 CREATE OR ALTER PROCEDURE sp_list_categories
 AS
 BEGIN
@@ -89,7 +93,9 @@ BEGIN
 END
 GO
 
---6.Procedure "listado-suppliers"
+exec sp_list_categories;
+
+--6.Procedure "listado-suppliers" -> DROPDOWN SUPPLIERS
 CREATE OR ALTER PROCEDURE sp_list_suppliers
 AS
 BEGIN
@@ -99,13 +105,14 @@ BEGIN
 END
 GO
 
+exec sp_list_suppliers;
+
 --7.Procedure "insert-product"
 CREATE OR ALTER PROCEDURE sp_insert_product
 @ProductName VARCHAR(80),
 @UnitPrice MONEY,
 @UnitsInStock SMALLINT,
 -- @Descontinued BIT = 0, --acabado
-
 @SupplierID INT,
 @CategoryID INT
 AS
@@ -114,3 +121,51 @@ BEGIN
 	VALUES (@ProductName,@UnitPrice,@UnitsInStock,0,@SupplierID,@CategoryID);
 END
 GO
+
+--8.Procedure "update-product"
+CREATE OR ALTER PROCEDURE sp_update_product
+	@ProductID AS INT,
+	@ProductName AS VARCHAR(80),
+	@UnitPrice AS MONEY,
+	@UnitsInStock AS SMALLINT,
+	@Descontinued AS BIT,
+	@SupplierID AS INT,
+	@CategoryID AS INT
+AS
+BEGIN
+	UPDATE [dbo].[Products]
+   SET [ProductName] = @ProductName
+      ,[UnitPrice] = @UnitPrice
+      ,[UnitsInStock] = @UnitsInStock
+      ,[Descontinued] = @Descontinued
+      ,[SupplierID] = @SupplierID
+      ,[CategoryID] = @CategoryID
+	WHERE ProductID=@ProductID;
+END
+GO
+
+--9.Procedure get-product-by-id
+CREATE OR ALTER PROCEDURE sp_get_product_by_id
+	@ProductID AS INT
+AS
+BEGIN
+	SELECT [ProductID]
+      ,[ProductName]
+      ,[UnitPrice]
+      ,[UnitsInStock]
+      ,[Descontinued]
+      ,[SupplierID]
+      ,[CategoryID]
+  FROM [dbo].[Products]
+  WHERE ProductID=@ProductID;
+END
+GO
+
+--verificamos los tipos de datos de las columnas de Products
+exec sp_help Products;
+
+select * from Products;
+
+/*eliminacion de duplicados en supplier (error mio)
+delete from Suppliers
+where SupplierID in (4,5,6);*/
